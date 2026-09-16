@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LIG DNA 스마트 워크 & TODO 매니저</title>
-  <meta name="description" content="LIG DNA 스마트 업무 및 태스크 관리 웹 애플리케이션">
+  <title>오늘 뭐먹지?</title>
+  <meta name="description" content="조건에 맞는 맛집을 찾아주는 맛집 추천 웹 애플리케이션">
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,45 +22,17 @@
     <header class="app-header">
       <div class="brand-area">
         <div class="logo-badge">
-          <svg class="dna-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4c4 4 4 12 8 16M20 4c-4 4-4 12-8 16M4 8h16M4 16h16M8 12h8" stroke-linecap="round"/>
-          </svg>
+          <span class="logo-emoji">🍽️</span>
         </div>
         <div class="brand-text">
           <div class="brand-title">
-            <span class="brand-highlight">LIG DNA</span> TODO
-            <span class="version-tag">PRO</span>
+            <span class="brand-highlight">오늘 뭐먹지?</span>
           </div>
-          <p class="brand-subtitle">Smart DX & Task Management System</p>
+          <p class="brand-subtitle">조건만 입력하면 나에게 맞는 맛집을 찾아드려요</p>
         </div>
       </div>
 
       <div class="header-actions">
-        <!-- 현재 시각 표시 -->
-        <div class="time-widget" id="currentTimeWidget">
-          <span class="live-dot"></span>
-          <span id="liveClock">00:00:00</span>
-        </div>
-
-        <!-- 포커스 타이머 버튼 -->
-        <button class="icon-btn" id="openTimerBtn" title="DNA 포커스 모드 (25분 집중 타이머)" aria-label="포커스 모드 열기">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          <span class="btn-text">포커스 모드</span>
-        </button>
-
-        <!-- 데이터 내보내기 버튼 -->
-        <button class="icon-btn" id="exportBtn" title="할 일 데이터 JSON 백업 다운로드" aria-label="데이터 백업">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span class="btn-text">백업</span>
-        </button>
-
         <!-- 테마 토글 버튼 -->
         <button class="theme-toggle-btn" id="themeToggleBtn" title="라이트/다크 테마 전환" aria-label="테마 변경">
           <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -81,308 +53,121 @@
       </div>
     </header>
 
-    <!-- 대시보드 통계 카드 그리드 -->
-    <section class="stats-section">
-      <div class="stat-card progress-stat-card">
-        <div class="stat-header">
-          <span class="stat-label">전체 달성률</span>
-          <span class="stat-percent-badge" id="progressPercentBadge">0%</span>
-        </div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
-        </div>
-        <div class="progress-caption" id="progressCaption">0개 완료됨 / 총 0개</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrap icon-active">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 6v6l4 2"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <div class="stat-value" id="statActive">0</div>
-          <div class="stat-name">진행 중</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrap icon-due">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <div class="stat-value text-amber" id="statDueToday">0</div>
-          <div class="stat-name">오늘 마감</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrap icon-star">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" stroke="none">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <div class="stat-value text-yellow" id="statStarred">0</div>
-          <div class="stat-name">중요 업무</div>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrap icon-done">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <div class="stat-value text-green" id="statCompleted">0</div>
-          <div class="stat-name">완료됨</div>
-        </div>
-      </div>
+    <!-- 히어로 영역 -->
+    <section class="hero-section">
+      <h1 class="hero-title">오늘 어디서 뭐 먹지?</h1>
+      <p class="hero-sub">지역, 음식 종류, 예산, 분위기를 알려주시면 딱 맞는 맛집을 추천해드려요.</p>
     </section>
 
-    <!-- 프리셋 빠른 추가 바 -->
-    <div class="preset-section">
-      <span class="preset-title">💡 빠른 업무 추천:</span>
-      <div class="preset-chips">
-        <button class="preset-chip" data-title="LIG DNA 혁신 과제 주간 성과 점검" data-cat="DNA혁신" data-pri="긴급">
-          + DNA 혁신 점검
-        </button>
-        <button class="preset-chip" data-title="RPA 자동화 프로세스 로그 및 장애 모니터링" data-cat="업무" data-pri="높음">
-          + RPA 프로세스 점검
-        </button>
-        <button class="preset-chip" data-title="차세대 클라우드 데이터 파이프라인 아키텍처 검토" data-cat="프로젝트" data-pri="보통">
-          + 아키텍처 검토
-        </button>
-        <button class="preset-chip" data-title="생성형 AI 워크플로우 실무 적용 스터디" data-cat="학습" data-pri="낮음">
-          + AI 스터디
-        </button>
-      </div>
-    </div>
-
-    <!-- 신규 할 일 입력 폼 (Glassmorphic Card) -->
-    <section class="task-input-card">
-      <form id="addTodoForm">
-        <div class="input-main-row">
-          <div class="input-field-wrap">
-            <svg class="search-placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <input type="text" id="taskTitleInput" class="task-text-input" placeholder="새로운 할 일 또는 업무를 입력하세요 (Enter로 등록)" autocomplete="off" required>
+    <!-- 조건 입력 폼 (Glassmorphic Card) -->
+    <section class="search-card">
+      <form id="recommendForm">
+        <!-- 지역 -->
+        <div class="form-block">
+          <label class="form-block-label" for="locationInput">지역</label>
+          <input type="text" id="locationInput" class="task-text-input" placeholder="예: 강남, 홍대, 성수, 잠실..." autocomplete="off">
+          <div class="quick-chips" id="regionChips">
+            <button type="button" class="preset-chip" data-value="강남">강남</button>
+            <button type="button" class="preset-chip" data-value="홍대">홍대</button>
+            <button type="button" class="preset-chip" data-value="성수">성수</button>
+            <button type="button" class="preset-chip" data-value="잠실">잠실</button>
+            <button type="button" class="preset-chip" data-value="서울">서울</button>
           </div>
-          <button type="submit" class="primary-btn" id="submitTaskBtn">
-            <span>등록</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
         </div>
 
-        <div class="input-options-row">
-          <!-- 카테고리 선택 -->
-          <div class="option-group">
-            <label for="taskCategorySelect" class="option-label">카테고리</label>
-            <select id="taskCategorySelect" class="select-input">
-              <option value="업무">🏢 업무</option>
-              <option value="DNA혁신">🧬 DNA혁신</option>
-              <option value="프로젝트">🚀 프로젝트</option>
-              <option value="개인">☕ 개인</option>
-              <option value="학습">📚 학습</option>
+        <!-- 음식 종류 -->
+        <div class="form-block">
+          <label class="form-block-label">음식 종류</label>
+          <div class="chip-select-group" id="foodTypeGroup" role="group" aria-label="음식 종류 선택">
+            <button type="button" class="chip-select" data-value="한식">한식</button>
+            <button type="button" class="chip-select" data-value="중식">중식</button>
+            <button type="button" class="chip-select" data-value="일식">일식</button>
+            <button type="button" class="chip-select" data-value="양식">양식</button>
+            <button type="button" class="chip-select" data-value="치킨">치킨</button>
+            <button type="button" class="chip-select" data-value="고기">고기</button>
+            <button type="button" class="chip-select" data-value="카페">카페</button>
+            <button type="button" class="chip-select" data-value="디저트">디저트</button>
+            <button type="button" class="chip-select active" data-value="상관없음">상관없음</button>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <!-- 예산 -->
+          <div class="form-block">
+            <label class="form-block-label" for="budgetSelect">예산 (1인 기준)</label>
+            <select id="budgetSelect" class="select-input full-width">
+              <option value="상관없음">상관없음</option>
+              <option value="1만원 이하">1만원 이하</option>
+              <option value="1~2만원">1~2만원</option>
+              <option value="2~3만원" selected>2~3만원</option>
+              <option value="3~5만원">3~5만원</option>
+              <option value="5만원 이상">5만원 이상</option>
             </select>
           </div>
 
-          <!-- 우선순위 선택 -->
-          <div class="option-group">
-            <label for="taskPrioritySelect" class="option-label">우선순위</label>
-            <select id="taskPrioritySelect" class="select-input">
-              <option value="긴급">🔥 긴급</option>
-              <option value="높음">⚡ 높음</option>
-              <option value="보통" selected>🔹 보통</option>
-              <option value="낮음">☕ 낮음</option>
+          <!-- 인원 -->
+          <div class="form-block">
+            <label class="form-block-label" for="peopleSelect">인원</label>
+            <select id="peopleSelect" class="select-input full-width">
+              <option value="1명">1명</option>
+              <option value="2명" selected>2명</option>
+              <option value="3명">3명</option>
+              <option value="4명">4명</option>
+              <option value="5명 이상">5명 이상</option>
             </select>
           </div>
-
-          <!-- 마감일자 선택 -->
-          <div class="option-group">
-            <label for="taskDueDateInput" class="option-label">마감일</label>
-            <input type="date" id="taskDueDateInput" class="date-input">
-          </div>
-
-          <!-- 중요 체크 -->
-          <div class="option-group option-checkbox-group">
-            <label class="checkbox-label" title="상단 고정 중요 업무로 지정">
-              <input type="checkbox" id="taskStarCheckbox">
-              <span class="star-check-icon">★ 중요</span>
-            </label>
-          </div>
-
-          <!-- 상세 메모 열기 토글 버튼 -->
-          <button type="button" class="text-btn toggle-desc-btn" id="toggleDescBtn">
-            + 상세 메모
-          </button>
         </div>
 
-        <!-- 상세 설명 입력 (접이식) -->
-        <div class="input-desc-wrap" id="descWrap" style="display: none;">
-          <textarea id="taskDescInput" class="textarea-input" placeholder="세부적인 업무 내용이나 체크포인트를 자유롭게 작성하세요..." rows="2"></textarea>
+        <!-- 분위기 (다중 선택) -->
+        <div class="form-block">
+          <label class="form-block-label">분위기 <span class="label-hint">(중복 선택 가능)</span></label>
+          <div class="chip-select-group multi" id="moodGroup" role="group" aria-label="분위기 선택">
+            <button type="button" class="chip-select" data-value="캐주얼">캐주얼</button>
+            <button type="button" class="chip-select" data-value="조용한">조용한</button>
+            <button type="button" class="chip-select" data-value="데이트">데이트</button>
+            <button type="button" class="chip-select" data-value="가족">가족</button>
+            <button type="button" class="chip-select" data-value="회식">회식</button>
+            <button type="button" class="chip-select" data-value="혼밥">혼밥</button>
+            <button type="button" class="chip-select" data-value="분위기 좋은">분위기 좋은</button>
+          </div>
         </div>
+
+        <!-- 추가 요청사항 -->
+        <div class="form-block">
+          <label class="form-block-label" for="requestTextarea">추가 요청사항</label>
+          <textarea id="requestTextarea" class="textarea-input full-width" rows="2" placeholder="예: 주차 가능했으면 좋겠어요. 웨이팅이 너무 긴 곳은 제외해주세요."></textarea>
+        </div>
+
+        <!-- 오류 메시지 -->
+        <div class="form-error" id="formError" style="display:none;"></div>
+
+        <button type="submit" class="primary-btn recommend-btn" id="recommendBtn">
+          <span id="recommendBtnText">🍽️ 맛집 추천받기</span>
+        </button>
       </form>
     </section>
 
-    <!-- 검색 & 필터링 툴바 -->
-    <section class="filter-toolbar">
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">전체 <span class="tab-badge" id="badgeAll">0</span></button>
-        <button class="filter-tab" data-filter="active">진행 중 <span class="tab-badge" id="badgeActive">0</span></button>
-        <button class="filter-tab" data-filter="starred">⭐ 중요 <span class="tab-badge" id="badgeStarred">0</span></button>
-        <button class="filter-tab" data-filter="today">📅 오늘 마감 <span class="tab-badge" id="badgeToday">0</span></button>
-        <button class="filter-tab" data-filter="completed">✅ 완료됨 <span class="tab-badge" id="badgeCompleted">0</span></button>
-      </div>
+    <!-- 로딩 상태 -->
+    <div class="loading-state" id="loadingState" style="display:none;">
+      <div class="loading-spinner"></div>
+      <p class="loading-title">🍽️ 맛집을 찾고 있어요...</p>
+      <p class="loading-sub">잠시만 기다려주세요.</p>
+    </div>
 
-      <div class="filter-controls">
-        <!-- 카테고리 필터 -->
-        <select id="filterCategory" class="filter-select" aria-label="카테고리 필터">
-          <option value="ALL">모든 카테고리</option>
-          <option value="업무">업무</option>
-          <option value="DNA혁신">DNA혁신</option>
-          <option value="프로젝트">프로젝트</option>
-          <option value="개인">개인</option>
-          <option value="학습">학습</option>
-        </select>
-
-        <!-- 정렬 기준 -->
-        <select id="sortOrder" class="filter-select" aria-label="정렬 순서">
-          <option value="default">기본순 (중요도순)</option>
-          <option value="dueAsc">마감일 임박순</option>
-          <option value="priority">우선순위순</option>
-          <option value="newest">최신 등록순</option>
-        </select>
-
-        <!-- 검색창 -->
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="searchInput" placeholder="검색..." autocomplete="off">
-        </div>
-
-        <!-- 완료 항목 일괄 삭제 -->
-        <button class="danger-outline-btn" id="clearCompletedBtn" title="완료된 모든 할 일 정리">
-          완료 비우기
-        </button>
-      </div>
-    </section>
-
-    <!-- 할 일 리스트 영역 -->
-    <main class="task-list-section">
-      <ul class="task-list" id="taskList">
-        <!-- 동적으로 카드 렌더링 -->
-      </ul>
-
-      <!-- 빈 상태(Empty State) -->
-      <div class="empty-state" id="emptyState" style="display: none;">
-        <div class="empty-icon-wrap">
-          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-        </div>
-        <h3 class="empty-title">할 일이 모두 완료되었거나 없습니다!</h3>
-        <p class="empty-sub">상단의 입력창이나 추천 태스크를 눌러 새로운 업무를 등록해 보세요.</p>
-      </div>
+    <!-- 결과 영역 -->
+    <main class="result-section" id="resultSection" style="display:none;">
+      <h2 class="result-heading" id="resultHeading">추천 결과</h2>
+      <div class="restaurant-grid" id="restaurantGrid"></div>
     </main>
-  </div>
 
-  <!-- 할 일 수정 모달 -->
-  <div class="modal-backdrop" id="editModal" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">할 일 수정</h3>
-        <button class="modal-close-btn" id="closeEditModalBtn">&times;</button>
-      </div>
-      <form id="editTodoForm">
-        <input type="hidden" id="editTaskId">
-        <div class="form-group">
-          <label class="form-label" for="editTaskTitle">제목</label>
-          <input type="text" id="editTaskTitle" class="task-text-input" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="editTaskCategory">카테고리</label>
-            <select id="editTaskCategory" class="select-input">
-              <option value="업무">🏢 업무</option>
-              <option value="DNA혁신">🧬 DNA혁신</option>
-              <option value="프로젝트">🚀 프로젝트</option>
-              <option value="개인">☕ 개인</option>
-              <option value="학습">📚 학습</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="editTaskPriority">우선순위</label>
-            <select id="editTaskPriority" class="select-input">
-              <option value="긴급">🔥 긴급</option>
-              <option value="높음">⚡ 높음</option>
-              <option value="보통">🔹 보통</option>
-              <option value="낮음">☕ 낮음</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="editTaskDueDate">마감일</label>
-            <input type="date" id="editTaskDueDate" class="date-input">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="editTaskDesc">상세 메모</label>
-          <textarea id="editTaskDesc" class="textarea-input" rows="3"></textarea>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="text-btn" id="cancelEditBtn">취소</button>
-          <button type="submit" class="primary-btn">저장하기</button>
-        </div>
-      </form>
+    <!-- 빈 상태(Empty State) -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <div class="empty-icon-wrap">🔍</div>
+      <h3 class="empty-title">조건에 맞는 맛집을 찾지 못했습니다.</h3>
+      <p class="empty-sub">검색 조건을 조금 완화해서 다시 시도해보세요.</p>
     </div>
-  </div>
 
-  <!-- 포커스 타이머 (Pomodoro) 모달 -->
-  <div class="modal-backdrop" id="timerModal" style="display: none;">
-    <div class="modal-card timer-modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">🧬 LIG DNA 포커스 타이머</h3>
-        <button class="modal-close-btn" id="closeTimerModalBtn">&times;</button>
-      </div>
-      <div class="timer-content">
-        <div class="timer-mode-selector">
-          <button class="mode-btn active" data-time="1500">집중 (25분)</button>
-          <button class="mode-btn" data-time="300">휴식 (5분)</button>
-          <button class="mode-btn" data-time="900">긴 휴식 (15분)</button>
-        </div>
-        
-        <div class="timer-display-ring">
-          <svg class="ring-svg" width="220" height="220">
-            <circle class="ring-bg" cx="110" cy="110" r="95"></circle>
-            <circle class="ring-progress" id="timerRingProgress" cx="110" cy="110" r="95"></circle>
-          </svg>
-          <div class="timer-digits-wrap">
-            <div class="timer-digits" id="timerDigits">25:00</div>
-            <div class="timer-sub-status" id="timerStatusLabel">준비 완료</div>
-          </div>
-        </div>
-
-        <div class="timer-controls">
-          <button class="primary-btn timer-action-btn" id="timerToggleBtn">시작</button>
-          <button class="icon-btn timer-reset-btn" id="timerResetBtn">초기화</button>
-        </div>
-      </div>
-    </div>
+    <p class="data-disclaimer">* 현재 추천 결과는 데모용 샘플 데이터를 기반으로 합니다.</p>
   </div>
 
   <!-- 토스트 알림 컨테이너 -->
