@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeToggleBtn = document.getElementById('themeToggleBtn');
   const toastContainer = document.getElementById('toastContainer');
+  const dataDisclaimer = document.querySelector('.data-disclaimer');
 
   /* ==========================================================================
      Theme Switcher (Dark / Light)
@@ -129,22 +130,49 @@ document.addEventListener('DOMContentLoaded', () => {
     results.forEach((r, idx) => {
       const card = document.createElement('div');
       card.className = 'restaurant-card';
+
+      const ratingHtml = r.rating != null
+        ? `<div class="card-rating">⭐ ${escapeHtml(r.rating)}</div>`
+        : '';
+
+      const metaParts = [];
+      if (r.cuisine) metaParts.push(escapeHtml(r.cuisine));
+      if (r.region) metaParts.push(escapeHtml(r.region));
+      if (r.review_count != null) metaParts.push(`리뷰 ${escapeHtml(r.review_count)}개`);
+      const metaHtml = metaParts.length
+        ? `<div class="card-meta">${metaParts.join(' · ')}</div>`
+        : '';
+
+      const priceHtml = r.price_display
+        ? `<div class="card-price">💰 ${escapeHtml(r.price_display)}</div>`
+        : '<div class="card-price card-price-muted">💰 가격 정보 없음</div>';
+
+      const detailItems = [];
+      detailItems.push(`<span>🍴 대표메뉴: ${r.signature_menu ? escapeHtml(r.signature_menu) : '정보 없음'}</span>`);
+      detailItems.push(`<span>📍 ${r.address ? escapeHtml(r.address) : '정보 없음'}</span>`);
+      detailItems.push(`<span>🕒 ${r.hours ? escapeHtml(r.hours) : '정보 없음'}</span>`);
+      if (r.phone) detailItems.push(`<span>📞 ${escapeHtml(r.phone)}</span>`);
+
+      const mapHref = r.map_url
+        ? r.map_url
+        : (r.map_query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map_query)}` : null);
+      const mapBtnHtml = mapHref
+        ? `<a class="card-action-btn" target="_blank" rel="noopener noreferrer" href="${escapeHtml(mapHref)}">지도 보기</a>`
+        : '';
+
       card.innerHTML = `
         <div class="card-top-row">
           <div class="card-name">${foodTypeEmoji(r.food_type)} ${escapeHtml(r.name)}</div>
-          <div class="card-rating">⭐ ${escapeHtml(r.rating)}</div>
+          ${ratingHtml}
         </div>
-        <div class="card-meta">${escapeHtml(r.cuisine)} · ${escapeHtml(r.region)} · 리뷰 ${escapeHtml(r.review_count)}개</div>
-        <div class="card-price">💰 ${escapeHtml(r.price_display)}</div>
+        ${metaHtml}
+        ${priceHtml}
         <div class="card-reason">"${escapeHtml(r.reason)}"</div>
         <div class="card-detail" id="detail-${idx}">
-          <span>🍴 대표메뉴: ${escapeHtml(r.signature_menu)}</span>
-          <span>📍 ${escapeHtml(r.address)}</span>
-          <span>🕒 ${escapeHtml(r.hours)}</span>
+          ${detailItems.join('\n          ')}
         </div>
         <div class="card-actions">
-          <a class="card-action-btn" target="_blank" rel="noopener noreferrer"
-             href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.map_query)}">지도 보기</a>
+          ${mapBtnHtml}
           <button type="button" class="card-action-btn detail-toggle-btn" data-target="detail-${idx}">상세보기</button>
         </div>
       `;
@@ -242,6 +270,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resultHeading.textContent = `추천 결과 (${data.results.length}곳)`;
         renderResults(data.results);
         resultSection.style.display = 'block';
+
+        if (dataDisclaimer) {
+          dataDisclaimer.textContent = data.source === 'kakao'
+            ? '* 카카오맵 검색 결과 기반 실제 매장 정보입니다. 일부 항목(평점/가격대/영업시간 등)은 제공되지 않을 수 있습니다.'
+            : '* 현재 추천 결과는 데모용 샘플 데이터를 기반으로 합니다.';
+        }
       } catch (err) {
         setLoading(false);
         showFormError('맛집 정보를 가져오는 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.');
