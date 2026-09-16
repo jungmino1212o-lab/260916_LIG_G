@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
 import restaurants
-import places
 
 app = Flask(__name__)
 
@@ -24,10 +23,7 @@ def recommend():
         }), 400
 
     try:
-        if places.is_configured():
-            results = places.search(data)
-        else:
-            results = restaurants.recommend(data)
+        results = restaurants.recommend(data)
     except Exception:
         app.logger.exception("맛집 추천 처리 중 오류가 발생했습니다.")
         return jsonify({
@@ -35,11 +31,7 @@ def recommend():
             "message": "추천을 생성하지 못했습니다. 잠시 후 다시 시도해주세요."
         }), 500
 
-    return jsonify({
-        "status": "success",
-        "results": results,
-        "source": "kakao" if places.is_configured() else "sample"
-    })
+    return jsonify({"status": "success", "results": results})
 
 
 if __name__ == '__main__':

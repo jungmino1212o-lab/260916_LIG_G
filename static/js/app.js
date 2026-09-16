@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeToggleBtn = document.getElementById('themeToggleBtn');
   const toastContainer = document.getElementById('toastContainer');
-  const dataDisclaimer = document.querySelector('.data-disclaimer');
 
   /* ==========================================================================
      Theme Switcher (Dark / Light)
@@ -270,12 +269,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resultHeading.textContent = `추천 결과 (${data.results.length}곳)`;
         renderResults(data.results);
         resultSection.style.display = 'block';
-
-        if (dataDisclaimer) {
-          dataDisclaimer.textContent = data.source === 'kakao'
-            ? '* 카카오맵 검색 결과 기반 실제 매장 정보입니다. 일부 항목(평점/가격대/영업시간 등)은 제공되지 않을 수 있습니다.'
-            : '* 현재 추천 결과는 데모용 샘플 데이터를 기반으로 합니다.';
-        }
       } catch (err) {
         setLoading(false);
         showFormError('맛집 정보를 가져오는 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.');
