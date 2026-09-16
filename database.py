@@ -2,7 +2,10 @@ import sqlite3
 import os
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "todo.db")
+if os.environ.get("VERCEL"):
+    DB_PATH = "/tmp/todo.db"
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), "todo.db")
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
